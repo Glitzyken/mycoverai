@@ -1,5 +1,19 @@
-version: "3"
 services:
+  mycoverai:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Will only build development stage from the dockerfile
+      target: development
+    container_name: mycoverai
+    env_file:
+        - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev
+    ports:
+      - 5090:5090
   postgres:
     image: postgres
     container_name: postgres
@@ -7,10 +21,9 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - mycoveraidb:/var/lib/postgresql/data
     env_file:
       - docker.env
-      
   pgadmin:
     links:
       - postgres:postgres
@@ -19,9 +32,11 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./data/pgadmin:/root/.pgadmin
+      - mycoveraiadmin:/root/.pgadmin
     env_file:
       - docker.env
     depends_on:
       - postgres
- 
+volumes:
+  mycoveraidb:
+  mycoveraiadmin:
