@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
 
 import { CreateCountryDto } from './dto/create-country.dto';
 import { UpdateCountryDto } from './dto/update-country.dto';
@@ -35,4 +36,27 @@ export class CountryService {
   remove(id: number) {
     return `This action removes a #${id} country`;
   }
+
+  seedDB() {
+    fs.readFile('seed_data.json', 'utf8', async (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      const parsedData = JSON.parse(data);
+      const countries = this.countryRepository.create(parsedData.countries);
+      await this.countryRepository.save(countries);
+    });
+  }
 }
+
+/*
+  const json = JSON.stringify({
+    countries,
+  });
+
+  fs.writeFile('seed_data.json', json, 'utf8', () => {
+    console.log('Successful! 🥳🥳🥳');
+  });
+*/

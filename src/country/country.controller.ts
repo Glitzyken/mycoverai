@@ -31,6 +31,14 @@ export class CountryController {
     };
   }
 
+  @Post('seed')
+  seedDB() {
+    this.countryService.seedDB();
+    return {
+      message: 'DONE',
+    };
+  }
+
   @Get()
   async findAllCountries() {
     const countries = await this.countryService.findAllCountries();
