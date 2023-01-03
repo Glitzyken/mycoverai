@@ -13,11 +13,13 @@ export class CountryService {
     private readonly countryRepository: Repository<Country>,
   ) {}
 
-  create(createCountryDto: CreateCountryDto) {
-    return 'This action adds a new country';
+  async createCountry(createCountryDto: CreateCountryDto) {
+    const country = this.countryRepository.create(createCountryDto);
+    await this.countryRepository.save(country);
+    return country;
   }
 
-  async findAll() {
+  async findAllCountries() {
     const countries = await this.countryRepository.find();
     return countries;
   }
