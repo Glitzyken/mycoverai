@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
@@ -25,16 +25,30 @@ export class CountryService {
     return countries;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} country`;
+  async findOneCountry(id: number) {
+    const country = await this.countryRepository.findOne({ where: { id } });
+
+    if (!country) {
+      throw new NotFoundException('Country not found');
+    }
+
+    return country;
   }
 
-  update(id: number, updateCountryDto: UpdateCountryDto) {
-    return `This action updates a #${id} country`;
+  async updateCountry(id: number, updateCountryDto: UpdateCountryDto) {
+    await this.findOneCountry(id); // Checks if record exists
+
+    await this.countryRepository.update(id, updateCountryDto);
+    const updatedPost = await this.findOneCountry(id);
+
+    return updatedPost;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} country`;
+  async removeCountry(id: number) {
+    const deleteResponse = await this.countryRepository.delete(id);
+    if (!deleteResponse.affected) {
+      throw new NotFoundException('Country not found');
+    }
   }
 
   seedDB() {

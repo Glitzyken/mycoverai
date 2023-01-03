@@ -50,17 +50,37 @@ export class CountryController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.countryService.findOne(+id);
+  async findOneCountry(@Param('id') id: string) {
+    const country = await this.countryService.findOneCountry(+id);
+
+    return {
+      message: `DONE`,
+      result: country,
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCountryDto: UpdateCountryDto) {
-    return this.countryService.update(+id, updateCountryDto);
+  async updateCountry(
+    @Param('id') id: string,
+    @Body() updateCountryDto: UpdateCountryDto,
+  ) {
+    const country = await this.countryService.updateCountry(
+      +id,
+      updateCountryDto,
+    );
+
+    return {
+      message: `UPDATED`,
+      result: country,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.countryService.remove(+id);
+  async removeCountry(@Param('id') id: string) {
+    await this.countryService.removeCountry(+id);
+
+    return {
+      message: `DONE`,
+    };
   }
 }
