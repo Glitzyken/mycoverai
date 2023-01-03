@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -40,8 +41,8 @@ export class CountryController {
   }
 
   @Get()
-  async findAllCountries() {
-    const countries = await this.countryService.findAllCountries();
+  async findAllCountries(@Query('type') type: string) {
+    const countries = await this.countryService.findAllCountries(type);
 
     return {
       message: `ALL ${countries.length} COUNTRIES`,
