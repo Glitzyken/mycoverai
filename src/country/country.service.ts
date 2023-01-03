@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
@@ -18,27 +14,15 @@ export class CountryService {
     private readonly countryRepository: Repository<Country>,
   ) {}
 
-  async createCountry(createCountryDto: CreateCountryDto) {
+  async createCountry(createCountryDto: CreateCountryDto, { isTest }) {
+    createCountryDto.isTest = isTest;
     const country = this.countryRepository.create(createCountryDto);
     await this.countryRepository.save(country);
     return country;
   }
 
-  async findAllCountries(type: string) {
-    let countries: any;
-
-    if (!type) throw new BadRequestException('Type of request is required');
-
-    if (type === 'test') {
-      countries = await this.countryRepository.find({
-        where: { isLiveData: false },
-      });
-    } else if (type === 'production') {
-      countries = await this.countryRepository.find({
-        where: { isLiveData: true },
-      });
-    }
-
+  async findAllCountries({ isTest }) {
+    const countries = await this.countryRepository.find({ where: { isTest } });
     return countries;
   }
 

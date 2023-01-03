@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 
 import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
+import { RequestTypeMiddleware } from './shared/middlewares/requestType.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DbModule } from './db/db.module';
@@ -35,6 +36,6 @@ import { Country } from './country/entities/country.entity';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware, RequestTypeMiddleware).forRoutes('*');
   }
 }

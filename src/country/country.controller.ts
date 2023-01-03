@@ -1,3 +1,4 @@
+import { ExtendedRequest } from './../shared/interface/request.interface';
 import {
   Controller,
   Get,
@@ -9,7 +10,7 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
-  Query,
+  Req,
 } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -23,8 +24,14 @@ export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
   @Post()
-  async createCountry(@Body() createCountryDto: CreateCountryDto) {
-    const country = await this.countryService.createCountry(createCountryDto);
+  async createCountry(
+    @Req() req: ExtendedRequest,
+    @Body() createCountryDto: CreateCountryDto,
+  ) {
+    const country = await this.countryService.createCountry(
+      createCountryDto,
+      req,
+    );
 
     return {
       message: 'COUNTRY CREATED',
@@ -41,8 +48,8 @@ export class CountryController {
   }
 
   @Get()
-  async findAllCountries(@Query('type') type: string) {
-    const countries = await this.countryService.findAllCountries(type);
+  async findAllCountries(@Req() req: ExtendedRequest) {
+    const countries = await this.countryService.findAllCountries(req);
 
     return {
       message: `ALL ${countries.length} COUNTRIES`,

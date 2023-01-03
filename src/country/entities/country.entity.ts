@@ -14,20 +14,11 @@ export class Country {
   @Column({ nullable: false })
   public name: string;
 
-  @Column({ length: 2, nullable: false })
-  public cca2: string;
-
   @Column({ nullable: false })
   public capital: string;
 
-  @Column({ nullable: false })
-  public region: string;
-
-  @Column({ nullable: false })
-  public flag: string;
-
-  @Column({ type: 'boolean', default: true })
-  public isLiveData: boolean;
+  @Column({ type: 'boolean', default: false })
+  public isTest: boolean;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createDateTime: Date;
