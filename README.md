@@ -16,7 +16,7 @@ Check the `.env.example` file and create a `.env` file on root folder. Since thi
 
 ```bash
 # install dependencies
-$ npm run install
+$ npm i
 
 # start server
 $ npm run up:build
@@ -24,7 +24,7 @@ $ npm run up:build
 
 For testing purposes, you can seed the database by sending a `POST` request to `http://localhost:5090/api/v1/countries/seed`.
 
-Log into PGAdmin by opening `http://localhost:8080` on your browser and log in using the following credentials: `email: admin@admin.com` `password: admin`. When creating a new server in PGAdmin use `postgres` as database source instead of `localhost`.
+Log into PGAdmin by opening `http://localhost:8080` on your browser and use these credentials: `email: admin@admin.com` `password: admin`. When creating a new server in PGAdmin use `postgres` as database source instead of `localhost`.
 
 ## Stoping server
 
